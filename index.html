@@ -246,7 +246,6 @@
             loading.style.display = 'inline-block';
             submitBtn.disabled = true;
 
-            // Converte FormData para URLSearchParams para o Apps Script conseguir ler os parâmetros
             const urlEncodedData = new URLSearchParams(formData);
 
             fetch(SCRIPT_URL, {

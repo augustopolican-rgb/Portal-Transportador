@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Transportador</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-color: #e0e0e0;
+            --primary-color: #1976d2;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            height: 100vh;
+            color: var(--text-main);
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            border-bottom: 1px solid #f5f5f5;
+            transition: background 0.2s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #f4f6f8;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px 40px;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+
+        .input-group input, .input-group select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #1565c0;
+        }
+
+        #loading {
+            display: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            float: right;
+            margin-right: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">Portal Logístico</div>
+        <a href="#" class="nav-item active">Cadastro Geral</a>
+        <a href="#" class="nav-item">Consultas</a>
+        <a href="#" class="nav-item">Suporte</a>
+        <a href="#" class="nav-item" style="margin-top: auto;">Sair</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-title">Cadastro de Transportadora, Veículos e Condutores</div>
+        
+        <form id="cadastroForm">
+            <!-- Transportadora -->
+            <div class="form-card">
+                <h3>Dados da Transportadora</h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="cnpj">CNPJ *</label>
+                        <input type="text" id="cnpj" name="cnpj" required placeholder="00.000.000/0001-00">
+                    </div>
+                    <div class="input-group">
+                        <label for="razao_social">Razão Social *</label>
+                        <input type="text" id="razao_social" name="razao_social" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="telefone_transp">Telefone</label>
+                        <input type="text" id="telefone_transp" name="telefone_transp">
+                    </div>
+                    <div class="input-group">
+                        <label for="cidade_estado">Cidade/UF</label>
+                        <input type="text" id="cidade_estado" name="cidade_estado" placeholder="Ex: São Paulo - SP">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Veículo -->
+            <div class="form-card">
+                <h3>Dados do Veículo</h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="placa">Placa *</label>
+                        <input type="text" id="placa" name="placa" required placeholder="ABC-1234">
+                    </div>
+                    <div class="input-group">
+                        <label for="tipo_veiculo">Tipo de Veículo *</label>
+                        <select id="tipo_veiculo" name="tipo_veiculo" required>
+                            <option value="">Selecione...</option>
+                            <option value="Toco">Caminhão Toco</option>
+                            <option value="Truck">Caminhão Truck</option>
+                            <option value="Carreta">Carreta</option>
+                            <option value="Vuc">VUC</option>
+                            <option value="Utilitario">Utilitário (Fiorino, Van)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="capacidade">Capacidade (KG)</label>
+                        <input type="number" id="capacidade" name="capacidade">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Condutor -->
+            <div class="form-card">
+                <h3>Dados do Condutor Principal</h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="nome_condutor">Nome Completo *</label>
+                        <input type="text" id="nome_condutor" name="nome_condutor" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="cpf_condutor">CPF *</label>
+                        <input type="text" id="cpf_condutor" name="cpf_condutor" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="cnh">Número CNH *</label>
+                        <input type="text" id="cnh" name="cnh" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="telefone_condutor">Celular do Condutor *</label>
+                        <input type="text" id="telefone_condutor" name="telefone_condutor" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Salvar Cadastro</button>
+            <span id="loading">Enviando dados...</span>
+        </form>
+    </main>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbzAFSo2h2_QpGCkUL0f84TqOY-ucBtv38QvM1FTc_zt0RzY4fLL47ogVy3hi0HfnXwR/exec';
+
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const loading = document.getElementById('loading');
+            const submitBtn = document.querySelector('.btn-submit');
+
+            loading.style.display = 'inline-block';
+            submitBtn.disabled = true;
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                alert('Cadastro enviado com sucesso!');
+                document.getElementById('cadastroForm').reset();
+            })
+            .catch(error => {
+                alert('Erro ao enviar os dados. Verifique a conexão.');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
